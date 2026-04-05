@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['VIEWER', 'ANALYST', 'ADMIN'],
         default: 'VIEWER'
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 });
 

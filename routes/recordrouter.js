@@ -97,6 +97,45 @@ router.get('/', authMiddleware, authorize('ANALYST', 'ADMIN'), controller.getAll
 
 /**
  * @swagger
+ * /api/records/insights/monthly:
+ *   get:
+ *     tags: [Records]
+ *     summary: Get personalized monthly financial insights
+ *     description: Returns cash-flow pulse metrics for one month. Requires VIEWER, ANALYST, or ADMIN role.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: month
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: 2026-04
+ *         description: Month in YYYY-MM format. Defaults to current month.
+ *     responses:
+ *       200:
+ *         description: Monthly insights fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MonthlyInsightsResponse'
+ *       400:
+ *         description: Invalid month format
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       500:
+ *         description: Server error
+ */
+router.get('/insights/monthly', authMiddleware, authorize('VIEWER', 'ANALYST', 'ADMIN'), controller.getMonthlyInsights);
+
+/**
+ * @swagger
  * /api/records/{id}:
  *   put:
  *     tags: [Records]

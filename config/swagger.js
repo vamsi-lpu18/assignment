@@ -55,6 +55,23 @@ const options = {
                         token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' }
                     }
                 },
+                UserSummary: {
+                    type: 'object',
+                    properties: {
+                        _id: { type: 'string', example: '67f13f4322a5f6e4a1d72f10' },
+                        name: { type: 'string', example: 'John Doe' },
+                        email: { type: 'string', example: 'john@example.com' },
+                        role: { type: 'string', enum: ['VIEWER', 'ANALYST', 'ADMIN'], example: 'ANALYST' },
+                        isActive: { type: 'boolean', example: true }
+                    }
+                },
+                UpdateUserRequest: {
+                    type: 'object',
+                    properties: {
+                        role: { type: 'string', enum: ['VIEWER', 'ANALYST', 'ADMIN'], example: 'VIEWER' },
+                        isActive: { type: 'boolean', example: false }
+                    }
+                },
                 ErrorResponse: {
                     type: 'object',
                     properties: {
@@ -109,6 +126,25 @@ const options = {
                         totalIncome: { type: 'number', example: 10000 },
                         totalExpense: { type: 'number', example: 6500 },
                         balance: { type: 'number', example: 3500 }
+                    }
+                },
+                MonthlyInsightsResponse: {
+                    type: 'object',
+                    properties: {
+                        month: { type: 'string', example: '2026-04' },
+                        totalIncome: { type: 'number', example: 10500 },
+                        totalExpense: { type: 'number', example: 7200 },
+                        netCashFlow: { type: 'number', example: 3300 },
+                        savingsRatePct: { type: 'number', example: 31.43 },
+                        topExpenseCategory: { type: 'string', nullable: true, example: 'Rent' },
+                        topExpenseAmount: { type: 'number', example: 2800 },
+                        expenseConcentrationPct: { type: 'number', example: 38.89 },
+                        dailyAverageExpense: { type: 'number', example: 240 },
+                        financialPulse: {
+                            type: 'string',
+                            enum: ['BULLISH', 'STABLE', 'WATCH', 'DEFICIT'],
+                            example: 'BULLISH'
+                        }
                     }
                 }
             }

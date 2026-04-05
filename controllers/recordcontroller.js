@@ -1,22 +1,25 @@
 const services = require('../services/recordservice');
 
+const MONTH_PATTERN = /^\d{4}-\d{2}$/;
+
 exports.createRecord = async (req, res) => {
     try {
-        const userId = req.userId;
         const { amount, type, category, date, notes } = req.body;
 
         if (!amount || !type || !category) {
             return res.status(400).json({ message: 'Amount, type, and category are required' });
         }
 
-        const record = await services.createRecord({
-            userId,
+        const payload = {
+            userId: req.userId,
             amount,
             type: String(type).toUpperCase(),
             category,
             date,
             notes
-        });
+        };
+
+        const record = await services.createRecord(payload);
 
         res.status(201).json(record);
     } catch (error) {
@@ -39,7 +42,6 @@ exports.update = async (req, res) => {
     try {
         const id = req.params.id;
         const data = { ...req.body };
-
         if (data.type) {
             data.type = String(data.type).toUpperCase();
         }
@@ -68,6 +70,22 @@ exports.delete = async (req, res) => {
         res.status(200).json({ message: 'Record soft deleted successfully' });
     } catch (error) {
         console.error('Error deleting record:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.getMonthlyInsights = async (req, res) => {
+    try {
+        const { month } = req.query;
+
+        if (month && !MONTH_PATTERN.test(month)) {
+            return res.status(400).json({ message: 'month must be in YYYY-MM format' });
+        }
+
+        const insights = await services.getMonthlyInsights(req.userId, month);
+        res.status(200).json(insights);
+    } catch (error) {
+        console.error('Error fetching monthly insights:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
